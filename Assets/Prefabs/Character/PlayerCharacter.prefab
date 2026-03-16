@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SelfTransform>k__BackingField: {fileID: 7502763492524590141}
+  <PlayerCamera>k__BackingField: {fileID: 3736923397781577181}
   _grabComponent: {fileID: 6471741636293576905}
   _socketRigidbody: {fileID: 4631447217229965839}
 --- !u!114 &6471741636293576905
@@ -594,7 +595,7 @@ Transform:
   m_GameObject: {fileID: 7348130496492934237}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.488, z: 0}
+  m_LocalPosition: {x: 0, y: 1.96, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -609,8 +610,8 @@ Camera:
   m_GameObject: {fileID: 7348130496492934237}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -680,7 +681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 7502763492524590141}
-  sensitivity: 2
+  sensitivity: 1
   smoothing: 1.5
 --- !u!114 &4297242802509042219
 MonoBehaviour:

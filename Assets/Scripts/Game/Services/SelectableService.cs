@@ -1,11 +1,13 @@
 using System;
+using Core;
 using Core.GameServices;
+using Game.Actors;
 using Game.Interfaces;
 using UnityEngine;
 
 namespace Game.Services
 {
-    public class SelectableService : MonoBehaviour, IService
+    public class SelectableService : MonoBehaviour, IService, IInjectWorld
     {
         public event Action<IInteractable> SelectableClickEvent;
         
@@ -16,7 +18,14 @@ namespace Game.Services
         private IInteractable _currentInteractable;
 
         private Vector2 _screenMiddlePosition;
-        
+        private WorldEventsService _worldEventsService;
+
+        public void OnInjectWorld(World world)
+        {
+            _worldEventsService = world.GetService<WorldEventsService>();
+            _worldEventsService.SpawnPlayerEvent += OnSpawnPlayerEvent;
+        }
+
         private void Awake()
         {
             _screenMiddlePosition = new Vector2(Screen.width / 2, Screen.height / 2);
@@ -24,6 +33,8 @@ namespace Game.Services
 
         private void Update()
         {
+            if(_rayCamera == null) return;
+            
             Ray ray = _rayCamera.ScreenPointToRay(_screenMiddlePosition);
             if (Physics.Raycast(ray, out var hitResult, _maxDistance, _interactableLayers))
             {
@@ -36,7 +47,7 @@ namespace Game.Services
                         interactable.OnCursorEnter();
                     }
                     
-                    if (Input.GetMouseButtonDown(0))
+                    if (Input.GetKeyDown(KeyCode.F))
                     {
                         _currentInteractable.OnCursorClick();
                         SelectableClickEvent?.Invoke(_currentInteractable);
@@ -51,6 +62,11 @@ namespace Game.Services
             {
                 ClearInteractable();
             }
+        }
+        
+        private void OnSpawnPlayerEvent(Character playerCharacter)
+        { 
+            _rayCamera = playerCharacter.PlayerCamera;
         }
 
         public bool TryGetInteractable(out IInteractable interactable)
@@ -73,5 +89,10 @@ namespace Game.Services
         }
 
         public Type GetRegisterType() => GetType();
+
+        private void OnDestroy()
+        {
+            _worldEventsService.SpawnPlayerEvent -= OnSpawnPlayerEvent;
+        }
     }
 }

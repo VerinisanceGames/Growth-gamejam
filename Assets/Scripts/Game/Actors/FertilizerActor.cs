@@ -6,6 +6,8 @@ namespace Game.Actors
 {
     public class FertilizerActor : Actor, IInteractable
     {
+        public bool IsActiveFertilizer => _isActive;
+        
         [Header("Description")]
         [SerializeField] private string TitleName;
         
@@ -13,6 +15,8 @@ namespace Game.Actors
         
         [Header("References")] 
         [SerializeField] private ConfigurableJoint _joint;
+
+        private bool _isActive = true;
         
         public void OnGrabEnable(Rigidbody socketRigidbody) =>
                                 _joint.connectedBody = socketRigidbody;
@@ -34,6 +38,11 @@ namespace Game.Actors
         public void OnCursorExit()
         {
             Debug.Log("Exit: " + TitleName);
+        }
+
+        public void OnDestroyFertilizer()
+        {
+            _isActive = false;
         }
     }
 }

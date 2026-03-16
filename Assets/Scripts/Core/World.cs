@@ -1,4 +1,5 @@
 using Core.GameServices;
+using Game.Actors;
 using Game.Services;
 using UnityEngine;
 
@@ -6,10 +7,20 @@ namespace Core
 {
     public class World : MonoBehaviour
     {
+        [Header("Character")]
+        [SerializeField] private Character _playerCharacter;
+        [SerializeField] private Transform _spawnTransform;
+
+        [Header("Camera")] 
+        [SerializeField] private GameObject _menuCamera;
+        [SerializeField] private CanvasGroup _menuCanvasGroup;
+        
+        [Header("Services")]
         [SerializeField] private MonoBehaviour[] _services;
         
         private GameInstance _gameInstance;
         private ServiceLocator _serviceLocator;
+        private WorldEventsService _worldEventsService;
 
         public void Initialize(GameInstance gameInstance)
         {
@@ -17,8 +28,8 @@ namespace Core
 
             _serviceLocator = new ServiceLocator();
 
-            var worldEventsService = new WorldEventsService();
-            _serviceLocator.Add(worldEventsService);
+            _worldEventsService = new WorldEventsService();
+            _serviceLocator.Add(_worldEventsService);
 
             foreach (var target in _services)
             {
@@ -33,7 +44,7 @@ namespace Core
                     dependency.OnInjectWorld(this);
             }
             
-            worldEventsService.OnLevelLoaded();;
+            _worldEventsService.OnLevelLoaded();
         }
         
         public GameInstance GetGameInstance() => _gameInstance;
@@ -42,5 +53,27 @@ namespace Core
         {
             return _serviceLocator.Get<TService>();
         }
+
+
+        public void StartGame()
+        {
+            Character character = Instantiate(_playerCharacter, _spawnTransform.position, _spawnTransform.rotation);
+            
+            var components = character.GetComponentsInChildren<MonoBehaviour>();
+            foreach (var component in components)
+            {
+                if(component is IInjectWorld dependency)
+                    dependency.OnInjectWorld(this);
+            }
+            
+            _menuCamera.SetActive(false);
+            _menuCanvasGroup.alpha = 0.0f;
+            
+            _worldEventsService.OnSpawnPlayer(character);
+            _worldEventsService.OnLevelStart();
+        }
+        
     }
+
+    
 }
