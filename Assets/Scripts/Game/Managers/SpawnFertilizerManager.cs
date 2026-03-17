@@ -24,6 +24,8 @@ namespace Game.Managers
         private int _stageIndex;
         private float _stageTimer;
         private bool _stageActive;
+
+        private bool _bLevelLose;
         
         private WorldEventsService _worldEventsService;
 
@@ -38,6 +40,7 @@ namespace Game.Managers
         private void OnBossTakeFertilizer(MonsterActor bossActor)
         {
             _stageActive = false;
+            _stageTimerText.text = "30:00";
         }
 
         private void OnPlayerTakeFertilizer()
@@ -81,11 +84,16 @@ namespace Game.Managers
                 if (_stageTimer <= 0.0f)
                 {
                     _stageActive = false;
-                    Debug.Log("Lose Game!");
+                    _worldEventsService.OnLevelLose();
+                    _bLevelLose = true;
                 }
             }
-            
-            OnSpawnFertilizer();
+
+            if (_bLevelLose == false)
+            {
+                _stageTimerText.text = "30:00";
+                OnSpawnFertilizer();
+            }
         }
 
         private void OnDestroy()

@@ -25,6 +25,11 @@ namespace Game.Components
                 .DOLocalMove(Vector3.zero, _animDuration)
                 .SetEase(_animEase)
                 .SetLink(targetItem.gameObject);
+            
+            targetItem
+                .DOLocalRotate(Vector3.zero, _animDuration)
+                .SetEase(_animEase)
+                .SetLink(targetItem.gameObject);
         }
 
 

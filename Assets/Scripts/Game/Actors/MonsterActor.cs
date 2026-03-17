@@ -1,7 +1,9 @@
+using System;
 using Core;
 using Core.GameServices;
 using DG.Tweening;
 using Game.Enums;
+using Game.Managers;
 using Game.Services;
 using UnityEngine;
 
@@ -9,6 +11,10 @@ namespace Game.Actors
 {
     public class MonsterActor : Actor, IInjectWorld
     {
+        [SerializeField] private CutsceneLook _cutsceneLook;
+        [SerializeField] private Transform _lookAtPoint;
+        [SerializeField] private float _transitionDuration;
+        
         [SerializeField] private Transform _containerTransform;
         [SerializeField] private EFertilizerType _conditionType;
         [SerializeField] private float _moveTime;
@@ -23,12 +29,15 @@ namespace Game.Actors
         private EFertilizerType _lastFertilizerType;
         private FertilizerActor _fertilizer;
         private bool _bIsTake;
+
+        private Character _playerCharacter;
         
         private WorldEventsService _worldEventsService;
 
         public void OnInjectWorld(World world)
         {
             _worldEventsService = world.GetService<WorldEventsService>();
+            _worldEventsService.SpawnPlayerEvent += OnSpawnPlayerEvent;
         }
 
         private void OnValidateCondition()
@@ -39,7 +48,11 @@ namespace Game.Actors
             }
             else
             {
-                _worldEventsService.OnLevelLose();
+                _playerCharacter.FirstPersonMovement.OnDisableController();
+                _cutsceneLook.LookAtPoint(_lookAtPoint.position, _transitionDuration, () =>
+                {
+                    _worldEventsService.OnLevelLose();
+                });
             }
         }
 
@@ -73,7 +86,8 @@ namespace Game.Actors
                 }
             }
         }
-
+        
+        private void OnSpawnPlayerEvent(Character playerCharacter) => _playerCharacter = playerCharacter;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -94,6 +108,11 @@ namespace Game.Actors
                 _light.intensity = _defaultIntensity;
                 _fertilizer = null;
             }
+        }
+
+        private void OnDestroy()
+        {
+            _worldEventsService.SpawnPlayerEvent -= OnSpawnPlayerEvent;
         }
     }
 }

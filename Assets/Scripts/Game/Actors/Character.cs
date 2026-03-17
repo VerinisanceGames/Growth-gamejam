@@ -11,6 +11,9 @@ namespace Game.Actors
     {
         [field: Header("Camera")]
         [field: SerializeField] public Camera PlayerCamera { get; private set; }
+        [field: SerializeField] public Transform CameraTransform { get; private set; }
+        
+        [field: SerializeField] public FirstPersonMovement FirstPersonMovement { get; private set; }
         
         [SerializeField] private GrabComponent _grabComponent;
         [SerializeField] private Rigidbody _socketRigidbody;
@@ -23,7 +26,13 @@ namespace Game.Actors
             _selectableService = world.GetService<SelectableService>();
             _worldEventsService = world.GetService<WorldEventsService>();
             
+            _worldEventsService.LevelLoseEvent += OnLevelLoseEvent;
             _selectableService.SelectableClickEvent += OnInteractableClick;
+        }
+
+        private void OnLevelLoseEvent()
+        {
+            
         }
 
         private void OnInteractableClick(IInteractable interactable)
@@ -59,6 +68,7 @@ namespace Game.Actors
 
         private void OnDestroy()
         {
+            _worldEventsService.LevelLoseEvent -= OnLevelLoseEvent;
             _selectableService.SelectableClickEvent -= OnInteractableClick;
         }
     }

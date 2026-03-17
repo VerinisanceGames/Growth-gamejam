@@ -1,15 +1,16 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Menusounds : MonoBehaviour
 {
+    [SerializeField] private AudioListener _menuListener;
+    
     public AudioSource mainMenuMusicSource;
     public AudioSource buttonSoundSource;
     public AudioClip clickSound;
     public AudioClip menuMusic;
 
     private bool musicFadeOutEnabled = false;
-
+    
     void Start()
     {
         if (mainMenuMusicSource != null && mainMenuMusicSource != null)
@@ -51,6 +52,7 @@ public class Menusounds : MonoBehaviour
             {
                 mainMenuMusicSource.Stop();
                 musicFadeOutEnabled = false;
+                _menuListener.enabled = false;
             }
             else
             {
