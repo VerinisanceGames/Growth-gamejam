@@ -10,6 +10,7 @@ namespace Game.Actors
     public class Glass : MonoBehaviour, IInjectWorld
     {
         [SerializeField] private GameObject _glassObject;
+        [SerializeField] private GameObject _textObject;
         
         [SerializeField] private Rigidbody[] _shards;
         [SerializeField] private Transform _epicenterTransform;
@@ -37,6 +38,8 @@ namespace Game.Actors
             
             _glassObject.SetActive(false);
             gameObject.SetActive(true);
+            _textObject.SetActive(false);
+            
             foreach (var shard in _shards)
             {
                 shard.isKinematic = false;

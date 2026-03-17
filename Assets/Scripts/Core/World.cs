@@ -54,9 +54,15 @@ namespace Core
             return _serviceLocator.Get<TService>();
         }
 
+        public void RestartGame()
+        {
+            _gameInstance.LoadScene(1);
+        }
+
 
         public void StartGame()
         {
+            
             Character character = Instantiate(_playerCharacter, _spawnTransform.position, _spawnTransform.rotation);
             
             var components = character.GetComponentsInChildren<MonoBehaviour>();

@@ -1,47 +1,37 @@
-using System.Collections;
+using Core;
+using Core.GameServices;
+using Cysharp.Threading.Tasks;
+using Game.Services;
 using UnityEngine;
 
-public class DelayedAudioLoop : MonoBehaviour
+public class DelayedAudioLoop : MonoBehaviour, IInjectWorld
 {
-    private AudioSource audioSource;
-    public AudioClip soundToLoop;
+    [SerializeField] private AudioSource audioSource;
+    
     public float delayBetweenPlays = 5.0f;
-    public float delayFromStart = 0f;
+    
+    private WorldEventsService _worldEventsService;
 
-    void Start()
+    public void OnInjectWorld(World world)
     {
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            Debug.LogError("AudioSource component not found!");
-            return;
-        }
-
-
-        // Assign the clip if not already assigned in the Inspector
-        if (soundToLoop != null && audioSource.clip == null)
-        {
-            audioSource.clip = soundToLoop;
-        }
-
-       
-        StartCoroutine(SoundLoopRoutine(delayFromStart));
+        _worldEventsService = world.GetService<WorldEventsService>();
+        _worldEventsService.LevelStartEvent += OnLevelStartEvent;
     }
 
-    IEnumerator SoundLoopRoutine(float delay)
+    private void OnLevelStartEvent()
     {
-        yield return new WaitForSeconds(delayFromStart);
+        if(audioSource != null)
+            OnRunAudioAsync().Forget();
+    }
 
-        while (true) // Loop forever
-        {
-            // Play the sound
-            if (audioSource.clip != null)
-            {
-                audioSource.Play();
-            }
+    private async UniTask OnRunAudioAsync()
+    {
+        await UniTask.WaitForSeconds(delayBetweenPlays);
+        audioSource.Play();
+    }
 
-            // Wait for the sound to finish playing AND the specified delay time
-            yield return new WaitForSeconds(audioSource.clip != null ? audioSource.clip.length + delayBetweenPlays : delayBetweenPlays);
-        }
+    private void OnDestroy()
+    {
+        _worldEventsService.LevelStartEvent -= OnLevelStartEvent;
     }
 }

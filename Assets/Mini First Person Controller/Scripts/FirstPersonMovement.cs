@@ -1,44 +1,123 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FirstPersonMovement : MonoBehaviour
 {
-    public float speed = 5;
+    [SerializeField] private CharacterController _controller;
+    [SerializeField] private float _speed = 5;
 
-    [Header("Running")]
-    public bool canRun = true;
     public bool IsRunning { get; private set; }
-    public float runSpeed = 9;
-    public KeyCode runningKey = KeyCode.LeftShift;
+    
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float jumpHeight = 1.5f;
+    [SerializeField] private float gravity = -20f;
 
-    Rigidbody rigidbody;
-    /// <summary> Functions to override movement speed. Will use the last added override. </summary>
-    public List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
+    [Header("Ground Check")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundDistance = 0.3f;
+    [SerializeField] private LayerMask groundMask;
 
+    [Header("Camera")]
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private float mouseSensitivity = 2f;
 
+    private bool _isEnableController = true;
+    private CharacterController controller;
+    private Vector3 velocity;
+    private float xRotation;
+    private bool isGrounded;
 
-    void Awake()
+    public float XRotation
     {
-        // Get the rigidbody on this.
-        rigidbody = GetComponent<Rigidbody>();
+        get => xRotation;
+        set => xRotation = value;
+    }
+    
+    private void Awake()
+    {
+        controller = GetComponent<CharacterController>();
+
+        if (cameraTransform == null)
+            cameraTransform = Camera.main.transform;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
-    void FixedUpdate()
+    private void Update()
     {
-        // Update IsRunning from input.
-        IsRunning = canRun && Input.GetKey(runningKey);
+        if (_isEnableController == false) return;
+        
+        HandleGroundCheck();
+        HandleMovement();
+        HandleJump();
+        ApplyGravity();
+        HandleCameraLook();
+    }
 
-        // Get targetMovingSpeed.
-        float targetMovingSpeed = IsRunning ? runSpeed : speed;
-        if (speedOverrides.Count > 0)
+    public void OnDisableController()
+    {
+        _isEnableController = false;
+    }
+
+    private void HandleGroundCheck()
+    {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        // Сбрасываем вертикальную скорость при приземлении
+        if (isGrounded && velocity.y < 0f)
+            velocity.y = -2f;
+    }
+
+    private void HandleMovement()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical   = Input.GetAxisRaw("Vertical");
+
+        // Движение относительно направления взгляда
+        Vector3 direction = transform.right * horizontal + transform.forward * vertical;
+
+        // Нормализуем только если есть реальный ввод (избегаем деления на 0)
+        if (direction.magnitude > 1f)
+            direction.Normalize();
+
+        controller.Move(direction * moveSpeed * Time.deltaTime);
+    }
+
+    private void HandleJump()
+    {
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            targetMovingSpeed = speedOverrides[speedOverrides.Count - 1]();
+            // Формула из физики: v = sqrt(h * -2 * g)
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
+    }
 
-        // Get targetVelocity from input.
-        Vector2 targetVelocity =new Vector2( Input.GetAxis("Horizontal") * targetMovingSpeed, Input.GetAxis("Vertical") * targetMovingSpeed);
+    private void ApplyGravity()
+    {
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+    }
 
-        // Apply movement.
-        rigidbody.velocity = transform.rotation * new Vector3(targetVelocity.x, rigidbody.velocity.y, targetVelocity.y);
+    private void HandleCameraLook()
+    {
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+        // Вращаем камеру по вертикали (с ограничением угла)
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -85f, 85f);
+        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+        // Вращаем персонажа по горизонтали
+        transform.Rotate(Vector3.up * mouseX);
+    }
+
+    // Отображение groundCheck в редакторе
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck == null) return;
+        Gizmos.color = isGrounded ? Color.green : Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, groundDistance);
     }
 }
