@@ -5,6 +5,7 @@ using DG.Tweening;
 using Game.Enums;
 using Game.Managers;
 using Game.Services;
+using Game.Enums;
 using UnityEngine;
 
 namespace Game.Actors
@@ -16,7 +17,7 @@ namespace Game.Actors
         [SerializeField] private float _transitionDuration;
         
         [SerializeField] private Transform _containerTransform;
-        [SerializeField] private EFertilizerType _conditionType;
+        [SerializeField] public EFertilizerType _conditionType;
         [SerializeField] private float _moveTime;
 
         [SerializeField] private float _moveJumpPower = 3.0f;
@@ -51,7 +52,11 @@ namespace Game.Actors
                 _playerCharacter.FirstPersonMovement.OnDisableController();
                 _cutsceneLook.LookAtPoint(_lookAtPoint.position, _transitionDuration, () =>
                 {
-                    _worldEventsService.OnLevelLose();
+                    if (_conditionType == EFertilizerType.Boss_4) {
+                        _worldEventsService.OnLevelLose(EGameLooseType.Fed_jared);
+                    } else {
+                        _worldEventsService.OnLevelLose(EGameLooseType.Fed_wrong);
+                    }
                 });
             }
         }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &7473060537127460954
+--- !u!1001 &6076352658916509555
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -11,27 +11,27 @@ PrefabInstance:
     - target: {fileID: 2292670442394579998, guid: bd2cd198f1e06d14a9e161778e904ed5,
         type: 3}
       propertyPath: <FertilizerType>k__BackingField
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2500761763992446483, guid: bd2cd198f1e06d14a9e161778e904ed5,
         type: 3}
       propertyPath: m_Name
-      value: Fertilizer_1
+      value: Fert_X
       objectReference: {fileID: 0}
     - target: {fileID: 5817250738621328195, guid: bd2cd198f1e06d14a9e161778e904ed5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.155064
+      value: -14.370563
       objectReference: {fileID: 0}
     - target: {fileID: 5817250738621328195, guid: bd2cd198f1e06d14a9e161778e904ed5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.020000458
+      value: 0.019999862
       objectReference: {fileID: 0}
     - target: {fileID: 5817250738621328195, guid: bd2cd198f1e06d14a9e161778e904ed5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.0644674
+      value: -5.8544464
       objectReference: {fileID: 0}
     - target: {fileID: 5817250738621328195, guid: bd2cd198f1e06d14a9e161778e904ed5,
         type: 3}
@@ -68,6 +68,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7420744900170382169, guid: bd2cd198f1e06d14a9e161778e904ed5,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20ed45eb16a77424daf37df39acb89d0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

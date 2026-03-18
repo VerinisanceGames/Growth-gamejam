@@ -3,6 +3,7 @@ using Core;
 using Core.GameServices;
 using Cysharp.Threading.Tasks;
 using Game.Services;
+using Game.Enums;
 using UnityEngine;
 
 namespace Game.Actors
@@ -27,7 +28,7 @@ namespace Game.Actors
             _worldEventsService.LevelLoseEvent += OnLevelLoseEvent;
         }
 
-        private void OnLevelLoseEvent()
+        private void OnLevelLoseEvent(EGameLooseType type)
         {
             RunAnimAsync().Forget();
         }

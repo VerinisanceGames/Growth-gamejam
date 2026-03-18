@@ -8,6 +8,9 @@ public class Tips : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // ??? если успеть фразы когда проходит 15 секунд - dont waste my time
+
+
         /** 
             первый раз когда подходишь к растению, оно говорит фразу:
             Мухоловка: "I'm hungry! Hungry!"

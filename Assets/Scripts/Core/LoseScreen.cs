@@ -3,6 +3,7 @@ using Core.GameServices;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Game.Services;
+using Game.Enums;
 using UnityEngine;
 
 namespace Core
@@ -21,7 +22,7 @@ namespace Core
             _eventsWorldService.LevelLoseEvent += OnLevelLoseEvent;
         }
 
-        private void OnLevelLoseEvent()
+        private void OnLevelLoseEvent(EGameLooseType type)
         {
             DelayShowing().Forget();
         }

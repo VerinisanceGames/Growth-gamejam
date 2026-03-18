@@ -4,6 +4,7 @@ using Core.GameServices;
 using Cysharp.Threading.Tasks;
 using Game.Actors;
 using Game.Services;
+using Game.Enums;
 using TMPro;
 using UnityEngine;
 
@@ -31,6 +32,7 @@ namespace Game.Managers
 
         public void OnInjectWorld(World world)
         {
+            Debug.Log("FertilizerManager OnInjectWorld");
             _worldEventsService = world.GetService<WorldEventsService>();
             _worldEventsService.LevelStartEvent += OnLevelStartEvent;
             _worldEventsService.PlayerTakeFertilizer += OnPlayerTakeFertilizer;
@@ -40,7 +42,7 @@ namespace Game.Managers
         private void OnBossTakeFertilizer(MonsterActor bossActor)
         {
             _stageActive = false;
-            _stageTimerText.text = "30:00";
+            _stageTimerText.text = "30:0";
         }
 
         private void OnPlayerTakeFertilizer()
@@ -84,14 +86,14 @@ namespace Game.Managers
                 if (_stageTimer <= 0.0f)
                 {
                     _stageActive = false;
-                    _worldEventsService.OnLevelLose();
+                    _worldEventsService.OnLevelLose(EGameLooseType.Timer);
                     _bLevelLose = true;
                 }
             }
 
             if (_bLevelLose == false)
             {
-                _stageTimerText.text = "30:00";
+                _stageTimerText.text = "30:0";
                 OnSpawnFertilizer();
             }
         }

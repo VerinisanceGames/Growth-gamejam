@@ -1,6 +1,7 @@
 using System;
 using Core.GameServices;
 using Game.Actors;
+using Game.Enums;
 
 namespace Game.Services
 {
@@ -8,7 +9,7 @@ namespace Game.Services
     {
         public event Action LevelLoadedEvent;
         public event Action LevelStartEvent;
-        public event Action LevelLoseEvent;
+        public event Action<EGameLooseType> LevelLoseEvent;
 
 
         public event Action<Character> SpawnPlayerEvent;
@@ -19,7 +20,7 @@ namespace Game.Services
         public void OnLevelLoaded() => LevelLoadedEvent?.Invoke();
 
         public void OnLevelStart() => LevelStartEvent?.Invoke();
-        public void OnLevelLose() => LevelLoseEvent?.Invoke();
+        public void OnLevelLose(EGameLooseType looseType) => LevelLoseEvent?.Invoke(looseType);
         
         public void OnSpawnPlayer(Character character) => SpawnPlayerEvent?.Invoke(character);
         public void OnPlayerTakeFertilizer() => PlayerTakeFertilizer?.Invoke();

@@ -3,6 +3,7 @@ using Core.GameServices;
 using Game.Components;
 using Game.Interfaces;
 using Game.Services;
+using Game.Enums;
 using UnityEngine;
 
 namespace Game.Actors
@@ -30,7 +31,7 @@ namespace Game.Actors
             _selectableService.SelectableClickEvent += OnInteractableClick;
         }
 
-        private void OnLevelLoseEvent()
+        private void OnLevelLoseEvent(EGameLooseType type)
         {
             
         }

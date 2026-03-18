@@ -11,12 +11,12 @@ PrefabInstance:
     - target: {fileID: 2292670442394579998, guid: bd2cd198f1e06d14a9e161778e904ed5,
         type: 3}
       propertyPath: <FertilizerType>k__BackingField
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2500761763992446483, guid: bd2cd198f1e06d14a9e161778e904ed5,
         type: 3}
       propertyPath: m_Name
-      value: Fertilizer_4
+      value: Fert_Water
       objectReference: {fileID: 0}
     - target: {fileID: 5817250738621328195, guid: bd2cd198f1e06d14a9e161778e904ed5,
         type: 3}
@@ -68,6 +68,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7420744900170382169, guid: bd2cd198f1e06d14a9e161778e904ed5,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4b5e82b07b2a0f141a55e5892d1649a2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
