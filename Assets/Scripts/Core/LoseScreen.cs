@@ -22,17 +22,19 @@ namespace Core
             _eventsWorldService.LevelLoseEvent += OnLevelLoseEvent;
         }
 
-        private void OnLevelLoseEvent(EGameLooseType type)
+        private void OnLevelLoseEvent(EGameLooseType type, EFertilizerType bossType)
         {
             DelayShowing().Forget();
         }
 
         private async UniTask DelayShowing()
         {
-            await UniTask.WaitForSeconds(1.0f);
+            await UniTask.WaitForSeconds(2.5f);
             
             _loseCanvas.enabled = true;
-            _canvasGroup.DOFade(1, _duration);
+            //_canvasGroup.DOFade(1, _duration);
+            _canvasGroup.alpha = 0f; 
+            _canvasGroup.DOFade(1, 2.0f);
             
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;

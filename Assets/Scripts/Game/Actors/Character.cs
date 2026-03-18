@@ -31,7 +31,7 @@ namespace Game.Actors
             _selectableService.SelectableClickEvent += OnInteractableClick;
         }
 
-        private void OnLevelLoseEvent(EGameLooseType type)
+        private void OnLevelLoseEvent(EGameLooseType type, EFertilizerType bossType)
         {
             
         }

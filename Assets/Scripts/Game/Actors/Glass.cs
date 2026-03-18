@@ -28,7 +28,7 @@ namespace Game.Actors
             _worldEventsService.LevelLoseEvent += OnLevelLoseEvent;
         }
 
-        private void OnLevelLoseEvent(EGameLooseType type)
+        private void OnLevelLoseEvent(EGameLooseType type, EFertilizerType bossType)
         {
             RunAnimAsync().Forget();
         }

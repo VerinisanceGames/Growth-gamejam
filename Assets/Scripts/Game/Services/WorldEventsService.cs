@@ -9,7 +9,7 @@ namespace Game.Services
     {
         public event Action LevelLoadedEvent;
         public event Action LevelStartEvent;
-        public event Action<EGameLooseType> LevelLoseEvent;
+        public event Action<EGameLooseType, EFertilizerType> LevelLoseEvent;
 
 
         public event Action<Character> SpawnPlayerEvent;
@@ -20,7 +20,7 @@ namespace Game.Services
         public void OnLevelLoaded() => LevelLoadedEvent?.Invoke();
 
         public void OnLevelStart() => LevelStartEvent?.Invoke();
-        public void OnLevelLose(EGameLooseType looseType) => LevelLoseEvent?.Invoke(looseType);
+        public void OnLevelLose(EGameLooseType looseType, EFertilizerType bossType) => LevelLoseEvent?.Invoke(looseType, bossType);
         
         public void OnSpawnPlayer(Character character) => SpawnPlayerEvent?.Invoke(character);
         public void OnPlayerTakeFertilizer() => PlayerTakeFertilizer?.Invoke();

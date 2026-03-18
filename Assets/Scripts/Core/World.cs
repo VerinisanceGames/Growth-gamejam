@@ -1,4 +1,5 @@
 using Core.GameServices;
+using Cysharp.Threading.Tasks;
 using Game.Actors;
 using Game.Services;
 using UnityEngine;
@@ -54,8 +55,9 @@ namespace Core
             return _serviceLocator.Get<TService>();
         }
 
-        public void RestartGame()
+        public async void RestartGame()
         {
+            await UniTask.WaitForSeconds(0.5f);
             _gameInstance.LoadScene(1);
         }
 

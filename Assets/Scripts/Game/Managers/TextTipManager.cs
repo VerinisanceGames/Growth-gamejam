@@ -26,8 +26,10 @@ namespace Game.Managers
         private string _textTip6 = "NEXT ONE IS FOR FRED. GOOD LUCK!";
         private string _textTip10 = "LAST ONE. POISON. YOU KNOW WHAT TO DO.";
         private string _textGameLostTimer = "TOO SLOW. WAKE UP THE NEXT ONE.";
-        private string _textGameLostFedWrong = "POOR WORKER. CLEAN OUT LAB 12. WAKE UP THE NEXT ONE.";
+        private string _textGameLostFedWrong = "POOR WORKER. CLEAN OUT LAB 12.\nWAKE UP THE NEXT ONE.";
         private string _textGameLostFedJared = "HE DID FED JARED. NOT A SMART ONE.\nCLEAN OUT LAB 12. WAKE UP THE NEXT ONE.";
+        //
+        private string _textFlytrapAngry = "NO TASTY! NO TASTY!";
         
         private WorldEventsService _worldEventsService;
 
@@ -41,8 +43,15 @@ namespace Game.Managers
             //_worldEventsService.BossTakeFertilizer += OnBossTakeFertilizer;
         }
 
-        private void OnLevelLoseEvent(EGameLooseType type)
+        private async void OnLevelLoseEvent(EGameLooseType type, EFertilizerType bossType)
         {
+            if (type == EGameLooseType.Fed_wrong) {
+                if (bossType == EFertilizerType.Boss_1) {
+                    _tipsText.text = _textFlytrapAngry;
+                }
+            }
+            //
+            await UniTask.WaitForSeconds(3.5f);
             if (type == EGameLooseType.Timer) {
                 _tipsText.text = _textGameLostTimer;
             } else  if (type == EGameLooseType.Fed_wrong) {

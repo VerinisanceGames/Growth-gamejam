@@ -53,9 +53,9 @@ namespace Game.Actors
                 _cutsceneLook.LookAtPoint(_lookAtPoint.position, _transitionDuration, () =>
                 {
                     if (_conditionType == EFertilizerType.Boss_4) {
-                        _worldEventsService.OnLevelLose(EGameLooseType.Fed_jared);
+                        _worldEventsService.OnLevelLose(EGameLooseType.Fed_jared, _conditionType);
                     } else {
-                        _worldEventsService.OnLevelLose(EGameLooseType.Fed_wrong);
+                        _worldEventsService.OnLevelLose(EGameLooseType.Fed_wrong, _conditionType);
                     }
                 });
             }
@@ -86,7 +86,7 @@ namespace Game.Actors
                         });
 
                     _fertilizer.SelfTransform
-                        .DOScale(new Vector3(0.5f, 0.5f, 0.5f), _moveTime)
+                        .DOScale(new Vector3(0.8f, 0.8f, 0.8f), _moveTime)
                         .SetLink(_fertilizer.gameObject);
                 }
             }

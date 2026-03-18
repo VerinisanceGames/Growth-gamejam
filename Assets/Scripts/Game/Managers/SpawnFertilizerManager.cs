@@ -86,7 +86,7 @@ namespace Game.Managers
                 if (_stageTimer <= 0.0f)
                 {
                     _stageActive = false;
-                    _worldEventsService.OnLevelLose(EGameLooseType.Timer);
+                    _worldEventsService.OnLevelLose(EGameLooseType.Timer, EFertilizerType.Boss_1);
                     _bLevelLose = true;
                 }
             }

@@ -32,6 +32,7 @@ namespace Game.Managers
         [Header("Common sounds")] 
         [SerializeField] private  AudioClip takeFertilizer;
         [SerializeField] private  AudioClip deliverFertilizer;
+        [SerializeField] private  AudioClip glassBreak;
 
         [Header("Plant sounds")] 
         [SerializeField] private  AudioClip firstTimeFlytrap;
@@ -75,14 +76,28 @@ namespace Game.Managers
             _worldEventsService.LevelLoseEvent += OnLevelLoseEvent;
         }
 
-        private void OnLevelLoseEvent(EGameLooseType type)
+        private async void OnLevelLoseEvent(EGameLooseType type, EFertilizerType bossType)
         {
             if (type == EGameLooseType.Timer) {
                 audioSource.PlayOneShot(gameLostTimer);
             } else  if (type == EGameLooseType.Fed_wrong) {
+                Debug.Log("SoundTipManager OnOnLevelLoseEventInjectWorld " + bossType);
+                commonAudioSource.PlayOneShot(glassBreak);
+                //
+                if (bossType == EFertilizerType.Boss_1) {
+                    plantAudioSource.PlayOneShot(angryFlytrap);
+                }
+                //
+                await UniTask.WaitForSeconds(3.5f);
                 audioSource.PlayOneShot(gameLostFedWrong);
             } else  if (type == EGameLooseType.Fed_jared) {
+                commonAudioSource.PlayOneShot(glassBreak);
+                //
+                plantAudioSource.PlayOneShot(angryJared);
+                //
+                await UniTask.WaitForSeconds(3.5f);
                 audioSource.PlayOneShot(gameLostFedJared);
+                
             }
         }
 
