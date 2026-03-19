@@ -39,17 +39,18 @@ namespace Game.Managers
             _worldEventsService = world.GetService<WorldEventsService>();
             _worldEventsService.LevelStartEvent += OnLevelStartEvent;
             _worldEventsService.PlayerTakeFertilizer += OnPlayerTakeFertilizer;
+            _worldEventsService.BossTakeFertilizer += OnBossTakeFertilizer;
             _worldEventsService.LevelLoseEvent += OnLevelLoseEvent;
-            //_worldEventsService.BossTakeFertilizer += OnBossTakeFertilizer;
         }
 
         private async void OnLevelLoseEvent(EGameLooseType type, EFertilizerType bossType)
         {
-            if (type == EGameLooseType.Fed_wrong) {
-                if (bossType == EFertilizerType.Boss_1) {
-                    _tipsText.text = _textFlytrapAngry;
-                }
-            }
+            _tipsText.text = "";
+            // if (type == EGameLooseType.Fed_wrong) {
+            //     if (bossType == EFertilizerType.Boss_1) {
+            //         _tipsText.text = _textFlytrapAngry;
+            //     }
+            // }
             //
             await UniTask.WaitForSeconds(3.5f);
             if (type == EGameLooseType.Timer) {
@@ -61,18 +62,9 @@ namespace Game.Managers
             }
         }
 
-        // private void OnBossTakeFertilizer(MonsterActor bossActor)
-        // {
-        //     _stageActive = false;
-        //     _stageTimerText.text = "30:00";
-        // }
-
         private void OnPlayerTakeFertilizer()
         {
-             Debug.Log("TextTipManager OnPlayerTakeFertilizer");
             _fertilizerIndex++;
-            _tipsText.text = "TESt TEST TEST TEST";
-            //OnRunStage().Forget();
 
             if (_fertilizerIndex == 1) {
                 _tipsText.text = _textTip1;
@@ -83,10 +75,14 @@ namespace Game.Managers
             }
         }
 
+        private void OnBossTakeFertilizer(MonsterActor bossActor)
+        {
+            _tipsText.text = "";
+        }
+
         private async void OnLevelStartEvent()
         {
             _fertilizerIndex = 0;
-            Debug.Log("TextTipManager OnLevelStartEvent");
 
             await UniTask.WaitForSeconds(delayBeforeStart1);
             _tipsText.text = _textStartGame1;
@@ -95,23 +91,14 @@ namespace Game.Managers
             if (_fertilizerIndex == 0) {
                 _tipsText.text = _textStartGame2;
             }
-            
-            //OnSpawnFertilizer();
         }
-
-        
-        // private async UniTask OnRunStage()
-        // {
-        //     Debug.Log("TextTipManager OnRunStage");
-        //     _fertilizerIndex = 0;
-        // }
 
         private void OnDestroy()
         {
             _worldEventsService.LevelStartEvent -= OnLevelStartEvent;
             _worldEventsService.PlayerTakeFertilizer -= OnPlayerTakeFertilizer;
+            _worldEventsService.BossTakeFertilizer -= OnBossTakeFertilizer;
             _worldEventsService.LevelLoseEvent -= OnLevelLoseEvent;
-            //_worldEventsService.BossTakeFertilizer -= OnBossTakeFertilizer;
         }
     }
 }

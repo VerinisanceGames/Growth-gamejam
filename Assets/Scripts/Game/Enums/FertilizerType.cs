@@ -14,5 +14,6 @@ namespace Game.Enums
         Timer,
         Fed_wrong,
         Fed_jared,
+        Success
     }
 }

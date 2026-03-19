@@ -24,40 +24,33 @@ namespace Game.Managers
         [SerializeField] private  AudioClip fertilizerTip6;
         [SerializeField] private  AudioClip fertilizerTip10;
 
-        [Header("Game lost sounds")] 
+        [Header("Game finish sounds")] 
         [SerializeField] private  AudioClip gameLostTimer;
         [SerializeField] private  AudioClip gameLostFedWrong;
         [SerializeField] private  AudioClip gameLostFedJared;
+        [SerializeField] private  AudioClip gameSuccessFedJared;
 
         [Header("Common sounds")] 
         [SerializeField] private  AudioClip takeFertilizer;
         [SerializeField] private  AudioClip deliverFertilizer;
         [SerializeField] private  AudioClip glassBreak;
+        [SerializeField] private  AudioClip gameLost;
+        [SerializeField] private  AudioClip gameSuccess;
 
         [Header("Plant sounds")] 
-        [SerializeField] private  AudioClip firstTimeFlytrap;
-        [SerializeField] private  AudioClip firstTimeMushroom;
-        [SerializeField] private  AudioClip firstTimeFlower;
-        [SerializeField] private  AudioClip firstTimeJared;
-        
-        [SerializeField] private  AudioClip readyToEatFlytrap;
-        [SerializeField] private  AudioClip readyToEatMushroom;
-        [SerializeField] private  AudioClip readyToEatFlower;
-        [SerializeField] private  AudioClip readyToEatJared;
-
-        [SerializeField] private  AudioClip rejectFoodFlytrap;
-        [SerializeField] private  AudioClip rejectFoodMushroom;
-        [SerializeField] private  AudioClip rejectFoodFlower;
-
-        [SerializeField] private  AudioClip eatFoodFlytrap;
-        [SerializeField] private  AudioClip eatFoodMushroom;
-        [SerializeField] private  AudioClip eatFoodFlower;
-        [SerializeField] private  AudioClip eatFoodJared;
-
+        // [SerializeField] private  AudioClip eatFoodFlytrap;
+        // [SerializeField] private  AudioClip eatFoodMushroom;
+        // [SerializeField] private  AudioClip eatFoodFlower;
+        // [SerializeField] private  AudioClip eatFoodJared;
         [SerializeField] private  AudioClip angryFlytrap;
         [SerializeField] private  AudioClip angryMushroom;
         [SerializeField] private  AudioClip angryFlower;
         [SerializeField] private  AudioClip angryJared;
+        [Header("-")] 
+        [SerializeField] private  AudioClip eatPlayerFlytrap;
+        [SerializeField] private  AudioClip eatPlayerMushroom;
+        [SerializeField] private  AudioClip eatPlayerFlower;
+        [SerializeField] private  AudioClip eatPlayerJared;
         
         private int _fertilizerIndex;
 
@@ -68,7 +61,6 @@ namespace Game.Managers
 
         public void OnInjectWorld(World world)
         {
-            Debug.Log("SoundTipManager OnInjectWorld");
             _worldEventsService = world.GetService<WorldEventsService>();
             _worldEventsService.LevelStartEvent += OnLevelStartEvent;
             _worldEventsService.PlayerTakeFertilizer += OnPlayerTakeFertilizer;
@@ -79,41 +71,69 @@ namespace Game.Managers
         private async void OnLevelLoseEvent(EGameLooseType type, EFertilizerType bossType)
         {
             if (type == EGameLooseType.Timer) {
+                await UniTask.WaitForSeconds(2.0f);
+                audioSource.PlayOneShot(gameLost);
+                await UniTask.WaitForSeconds(1.5f);
                 audioSource.PlayOneShot(gameLostTimer);
             } else  if (type == EGameLooseType.Fed_wrong) {
-                Debug.Log("SoundTipManager OnOnLevelLoseEventInjectWorld " + bossType);
                 commonAudioSource.PlayOneShot(glassBreak);
                 //
+                // FLYTRAP
                 if (bossType == EFertilizerType.Boss_1) {
                     plantAudioSource.PlayOneShot(angryFlytrap);
+                    //
+                    await UniTask.WaitForSeconds(2.5f);
+                    audioSource.PlayOneShot(eatPlayerFlytrap);
+                } else 
+                // MUSHROOM
+                if (bossType == EFertilizerType.Boss_2) {
+                    //plantAudioSource.PlayOneShot(angryFlytrap);
+                    //
+                    await UniTask.WaitForSeconds(1.5f);
+                    audioSource.PlayOneShot(eatPlayerMushroom);
+                } else 
+                // FLOWER
+                if (bossType == EFertilizerType.Boss_3) {
+                    plantAudioSource.PlayOneShot(angryFlower);
+                    //
+                    await UniTask.WaitForSeconds(1.7f);
+                    audioSource.PlayOneShot(eatPlayerFlower);
                 }
                 //
-                await UniTask.WaitForSeconds(3.5f);
+                await UniTask.WaitForSeconds(1.0f);
+                audioSource.PlayOneShot(gameLost);
+                //
+                await UniTask.WaitForSeconds(1.5f);
                 audioSource.PlayOneShot(gameLostFedWrong);
             } else  if (type == EGameLooseType.Fed_jared) {
                 commonAudioSource.PlayOneShot(glassBreak);
                 //
                 plantAudioSource.PlayOneShot(angryJared);
                 //
-                await UniTask.WaitForSeconds(3.5f);
+                await UniTask.WaitForSeconds(1.5f);
+                audioSource.PlayOneShot(eatPlayerJared);
+                //
+                await UniTask.WaitForSeconds(0.5f);
+                audioSource.PlayOneShot(gameLost);
+                //
+                await UniTask.WaitForSeconds(1.5f);
                 audioSource.PlayOneShot(gameLostFedJared);
-                
+            } else if (type == EGameLooseType.Success) {
+                commonAudioSource.PlayOneShot(glassBreak);
+                //
+                plantAudioSource.PlayOneShot(angryJared);
+                //
+                await UniTask.WaitForSeconds(2.0f);
+                audioSource.PlayOneShot(gameSuccess);
+                //
+                await UniTask.WaitForSeconds(1.5f);
+                audioSource.PlayOneShot(gameSuccessFedJared);
             }
         }
 
         private void OnBossTakeFertilizer(MonsterActor bossActor)
         {
             commonAudioSource.PlayOneShot(deliverFertilizer);
-
-            if (bossActor._conditionType == EFertilizerType.Boss_1) {
-                Debug.Log("delivered to FRED");
-            } else  if (bossActor._conditionType == EFertilizerType.Boss_2) {
-                Debug.Log("delivered to LILI");
-            } else  if (bossActor._conditionType == EFertilizerType.Boss_3) {
-                Debug.Log("delivered to FLOWER");
-            } else  if (bossActor._conditionType == EFertilizerType.Boss_4) {
-                Debug.Log("delivered to JARED");
-            }
         }
 
         private void OnPlayerTakeFertilizer()

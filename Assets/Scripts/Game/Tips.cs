@@ -28,7 +28,7 @@ public class Tips : MonoBehaviour
             Fert 1. Гриб. Type: voice, texture.  Голос: "First one is for Lili. Hurry up. You have 1 minute". Texture: Бочка с белым крестом.
             Fert 2. Цветок. Type: texture. Бочка с надписью "BAB"
             Fert 3. Мухоловка. Type: reaction. Реакция(Flytrap): "Give it to meeeee"
-            Fert 4. Цветок. Type: reaction. Реакция: "Darling, give it to me, please"
+            Fert 4. Цветок. Type: reaction. Реакция: "Darling, give it to me, please" Реакция(мухоловка): "No no no"
             Fert 5. Гриб. Type: texture. Бочка со знаком капля воды
             Fert 6. Мухоловка. Type: voice, reaction. Голос: "This one is for Fred." Реакция(Flower): "Darling, I hope you're not going to fertilize me with this."
             Fert 7. Мухоловка. Type: reaction. Реакция(Flytrap): "Give it to meeeee" (?)

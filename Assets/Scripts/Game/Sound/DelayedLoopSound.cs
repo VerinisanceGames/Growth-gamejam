@@ -8,7 +8,7 @@ public class DelayedAudioLoop : MonoBehaviour, IInjectWorld
 {
     [SerializeField] private AudioSource audioSource;
     
-    public float delayBetweenPlays = 5.0f;
+    public float delayBetweenPlays = 7.0f;
     
     private WorldEventsService _worldEventsService;
 
@@ -26,8 +26,9 @@ public class DelayedAudioLoop : MonoBehaviour, IInjectWorld
 
     private async UniTask OnRunAudioAsync()
     {
-        await UniTask.WaitForSeconds(delayBetweenPlays);
         audioSource.Play();
+        await UniTask.WaitForSeconds(delayBetweenPlays);
+        OnRunAudioAsync();
     }
 
     private void OnDestroy()

@@ -12,6 +12,8 @@ namespace Core
     {
         [SerializeField] private Canvas _loseCanvas;
         [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField] private Canvas _successCanvas;
+        [SerializeField] private CanvasGroup _successCanvasGroup;
         [SerializeField] private float _duration;
         
         private WorldEventsService _eventsWorldService;
@@ -24,17 +26,22 @@ namespace Core
 
         private void OnLevelLoseEvent(EGameLooseType type, EFertilizerType bossType)
         {
-            DelayShowing().Forget();
+            DelayShowing(type).Forget();
         }
 
-        private async UniTask DelayShowing()
+        private async UniTask DelayShowing(EGameLooseType type)
         {
             await UniTask.WaitForSeconds(2.5f);
             
-            _loseCanvas.enabled = true;
-            //_canvasGroup.DOFade(1, _duration);
-            _canvasGroup.alpha = 0f; 
-            _canvasGroup.DOFade(1, 2.0f);
+            if (type == EGameLooseType.Success) {
+                 _successCanvas.enabled = true;
+                _successCanvasGroup.alpha = 0f; 
+                _successCanvasGroup.DOFade(1, 1.3f);
+            } else {
+                _loseCanvas.enabled = true;
+                _canvasGroup.alpha = 0f; 
+                _canvasGroup.DOFade(1, 1.3f);
+            }
             
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
