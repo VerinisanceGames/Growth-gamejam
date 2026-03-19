@@ -1,11 +1,9 @@
-using System;
 using Core;
 using Core.GameServices;
 using DG.Tweening;
 using Game.Enums;
 using Game.Managers;
 using Game.Services;
-using Game.Enums;
 using UnityEngine;
 
 namespace Game.Actors
@@ -34,11 +32,15 @@ namespace Game.Actors
         private Character _playerCharacter;
         
         private WorldEventsService _worldEventsService;
+        private ObjectTooltip _objectTooltipService;
 
         public void OnInjectWorld(World world)
         {
             _worldEventsService = world.GetService<WorldEventsService>();
+            _objectTooltipService = world.GetService<ObjectTooltip>();
+            
             _worldEventsService.SpawnPlayerEvent += OnSpawnPlayerEvent;
+            
         }
 
         private void OnValidateCondition()
@@ -67,6 +69,7 @@ namespace Game.Actors
             {
                 if (Input.GetKeyDown(KeyCode.F))
                 {
+                    _objectTooltipService.HideText();
                     _bIsTake = true;
                     _fertilizer.OnDestroyFertilizer();
                     _fertilizer.SelfTransform.SetParent(null);
@@ -102,6 +105,8 @@ namespace Game.Actors
                 {
                     _light.intensity = _enterIntensity;
                     _fertilizer = fertilizer;
+                    
+                    _objectTooltipService.ShowText(_containerTransform.position);
                 }
             }
         }
@@ -112,6 +117,7 @@ namespace Game.Actors
             {
                 _light.intensity = _defaultIntensity;
                 _fertilizer = null;
+                _objectTooltipService.HideText();
             }
         }
 

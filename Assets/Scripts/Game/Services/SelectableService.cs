@@ -44,7 +44,7 @@ namespace Game.Services
                     {
                         _currentInteractable?.OnCursorExit();
                         _currentInteractable = interactable;
-                        interactable.OnCursorEnter();
+                        interactable.OnCursorEnter(hitResult.point);
                     }
                     
                     if (Input.GetKeyDown(KeyCode.F))

@@ -1,10 +1,13 @@
+using Core;
+using Core.GameServices;
 using Game.Enums;
 using Game.Interfaces;
+using Game.Managers;
 using UnityEngine;
 
 namespace Game.Actors
 {
-    public class FertilizerActor : Actor, IInteractable
+    public class FertilizerActor : Actor, IInteractable, IInjectWorld
     {
         public bool IsActiveFertilizer => _isActive;
         
@@ -18,6 +21,14 @@ namespace Game.Actors
 
         private bool _isActive = true;
         
+        private ObjectTooltip _objectTooltipService;
+
+        public void OnInjectWorld(World world)
+        {
+            _objectTooltipService = world.GetService<ObjectTooltip>();
+        }
+        
+        
         public void OnGrabEnable(Rigidbody socketRigidbody) =>
                                 _joint.connectedBody = socketRigidbody;
         
@@ -25,24 +36,26 @@ namespace Game.Actors
 
         public Transform GetTransform() => SelfTransform;
 
-        public void OnCursorEnter()
+        public void OnCursorEnter(Vector3 hitPosition)
         {
-            Debug.Log("Enter: " + TitleName);
+            if(_isActive)
+                _objectTooltipService.ShowText(hitPosition);
         }
 
         public void OnCursorClick()
         {
-            Debug.Log("Click: " + TitleName);
+            
         }
 
         public void OnCursorExit()
         {
-            Debug.Log("Exit: " + TitleName);
+            _objectTooltipService.HideText();
         }
 
         public void OnDestroyFertilizer()
         {
             _isActive = false;
         }
+        
     }
 }

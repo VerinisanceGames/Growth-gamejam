@@ -1,3 +1,4 @@
+using System.Threading;
 using Core;
 using Core.GameServices;
 using Cysharp.Threading.Tasks;
@@ -11,6 +12,7 @@ public class DelayedAudioLoop : MonoBehaviour, IInjectWorld
     public float delayBetweenPlays = 5.0f;
     
     private WorldEventsService _worldEventsService;
+    private CancellationTokenSource _tokenSource;
 
     public void OnInjectWorld(World world)
     {
@@ -20,8 +22,17 @@ public class DelayedAudioLoop : MonoBehaviour, IInjectWorld
 
     private void OnLevelStartEvent()
     {
+        _tokenSource = new CancellationTokenSource();
         if(audioSource != null)
-            OnRunAudioAsync().Forget();
+            LoopPlaying().Forget();
+    }
+
+    private async UniTask LoopPlaying()
+    {
+        while (_tokenSource.IsCancellationRequested == false)
+        {
+            await OnRunAudioAsync();
+        }
     }
 
     private async UniTask OnRunAudioAsync()
@@ -32,6 +43,7 @@ public class DelayedAudioLoop : MonoBehaviour, IInjectWorld
 
     private void OnDestroy()
     {
+        _tokenSource?.Cancel();
         _worldEventsService.LevelStartEvent -= OnLevelStartEvent;
     }
 }

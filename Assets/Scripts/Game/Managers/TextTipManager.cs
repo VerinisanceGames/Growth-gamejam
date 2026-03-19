@@ -35,7 +35,6 @@ namespace Game.Managers
 
         public void OnInjectWorld(World world)
         {
-            Debug.Log("TextTipManager OnInjectWorld");
             _worldEventsService = world.GetService<WorldEventsService>();
             _worldEventsService.LevelStartEvent += OnLevelStartEvent;
             _worldEventsService.PlayerTakeFertilizer += OnPlayerTakeFertilizer;
@@ -69,7 +68,6 @@ namespace Game.Managers
 
         private void OnPlayerTakeFertilizer()
         {
-             Debug.Log("TextTipManager OnPlayerTakeFertilizer");
             _fertilizerIndex++;
             _tipsText.text = "TESt TEST TEST TEST";
             //OnRunStage().Forget();
@@ -86,7 +84,6 @@ namespace Game.Managers
         private async void OnLevelStartEvent()
         {
             _fertilizerIndex = 0;
-            Debug.Log("TextTipManager OnLevelStartEvent");
 
             await UniTask.WaitForSeconds(delayBeforeStart1);
             _tipsText.text = _textStartGame1;

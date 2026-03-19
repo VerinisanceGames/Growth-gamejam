@@ -7,7 +7,7 @@ namespace Game.Interfaces
         string GetTitleName();
         Transform GetTransform();
 
-        void OnCursorEnter();
+        void OnCursorEnter(Vector3 hitPosition);
         void OnCursorClick();
         void OnCursorExit();
     }

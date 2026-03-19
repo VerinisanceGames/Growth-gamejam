@@ -29,10 +29,11 @@ namespace Game.Managers
         private bool _bLevelLose;
         
         private WorldEventsService _worldEventsService;
+        private World _world;
 
         public void OnInjectWorld(World world)
         {
-            Debug.Log("FertilizerManager OnInjectWorld");
+            _world = world;
             _worldEventsService = world.GetService<WorldEventsService>();
             _worldEventsService.LevelStartEvent += OnLevelStartEvent;
             _worldEventsService.PlayerTakeFertilizer += OnPlayerTakeFertilizer;
@@ -61,6 +62,11 @@ namespace Game.Managers
             {
                 var fertilizer = Instantiate(_fertilizerPrefabs[_stageIndex], _spawnTransform.position,
                     _spawnTransform.rotation);
+
+                var dp = fertilizer.GetComponentsInChildren<MonoBehaviour>();
+                foreach (var d in dp)
+                    if(d is IInjectWorld injectWorld)
+                        injectWorld.OnInjectWorld(_world);
             }
             else
             {
