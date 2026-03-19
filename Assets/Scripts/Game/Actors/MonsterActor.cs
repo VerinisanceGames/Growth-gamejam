@@ -1,11 +1,9 @@
-using System;
 using Core;
 using Core.GameServices;
 using DG.Tweening;
 using Game.Enums;
 using Game.Managers;
 using Game.Services;
-using Game.Enums;
 using UnityEngine;
 
 namespace Game.Actors
@@ -31,39 +29,32 @@ namespace Game.Actors
         private FertilizerActor _fertilizer;
         private bool _bIsTake;
 
-        private int _fertilizerIndex = 0;
-
         private Character _playerCharacter;
         
         private WorldEventsService _worldEventsService;
+        private ObjectTooltip _objectTooltipService;
 
         public void OnInjectWorld(World world)
         {
             _worldEventsService = world.GetService<WorldEventsService>();
+            _objectTooltipService = world.GetService<ObjectTooltip>();
+            
             _worldEventsService.SpawnPlayerEvent += OnSpawnPlayerEvent;
-            _worldEventsService.PlayerTakeFertilizer += OnPlayerTakeFertilizer;
-        }
-
-        private void OnPlayerTakeFertilizer()
-        {
-            _fertilizerIndex++;
+            
         }
 
         private void OnValidateCondition()
         {
             if (_lastFertilizerType == _conditionType)
             {
-                if (_conditionType == EFertilizerType.Boss_4 && _fertilizerIndex == 10) {
-                    _playerCharacter.FirstPersonMovement.OnDisableController();
-                    _worldEventsService.OnLevelLose(EGameLooseType.Success, _conditionType);
-                } 
+                
             }
             else
             {
                 _playerCharacter.FirstPersonMovement.OnDisableController();
                 _cutsceneLook.LookAtPoint(_lookAtPoint.position, _transitionDuration, () =>
                 {
-                   if (_conditionType == EFertilizerType.Boss_4) {
+                    if (_conditionType == EFertilizerType.Boss_4) {
                         _worldEventsService.OnLevelLose(EGameLooseType.Fed_jared, _conditionType);
                     } else {
                         _worldEventsService.OnLevelLose(EGameLooseType.Fed_wrong, _conditionType);
@@ -78,6 +69,7 @@ namespace Game.Actors
             {
                 if (Input.GetKeyDown(KeyCode.F))
                 {
+                    _objectTooltipService.HideText();
                     _bIsTake = true;
                     _fertilizer.OnDestroyFertilizer();
                     _fertilizer.SelfTransform.SetParent(null);
@@ -97,7 +89,7 @@ namespace Game.Actors
                         });
 
                     _fertilizer.SelfTransform
-                        .DOScale(new Vector3(0.9f, 0.9f, 0.9f), _moveTime)
+                        .DOScale(new Vector3(0.8f, 0.8f, 0.8f), _moveTime)
                         .SetLink(_fertilizer.gameObject);
                 }
             }
@@ -113,6 +105,8 @@ namespace Game.Actors
                 {
                     _light.intensity = _enterIntensity;
                     _fertilizer = fertilizer;
+                    
+                    _objectTooltipService.ShowText(_containerTransform.position);
                 }
             }
         }
@@ -123,13 +117,13 @@ namespace Game.Actors
             {
                 _light.intensity = _defaultIntensity;
                 _fertilizer = null;
+                _objectTooltipService.HideText();
             }
         }
 
         private void OnDestroy()
         {
             _worldEventsService.SpawnPlayerEvent -= OnSpawnPlayerEvent;
-            _worldEventsService.PlayerTakeFertilizer -= OnPlayerTakeFertilizer;
         }
     }
 }

@@ -35,7 +35,6 @@ namespace Game.Managers
 
         public void OnInjectWorld(World world)
         {
-            Debug.Log("TextTipManager OnInjectWorld");
             _worldEventsService = world.GetService<WorldEventsService>();
             _worldEventsService.LevelStartEvent += OnLevelStartEvent;
             _worldEventsService.PlayerTakeFertilizer += OnPlayerTakeFertilizer;
