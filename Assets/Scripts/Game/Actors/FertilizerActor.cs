@@ -11,6 +11,8 @@ namespace Game.Actors
     {
         public bool IsActiveFertilizer => _isActive;
         
+        [SerializeField] private Collider _collider;
+        
         [Header("Description")]
         [SerializeField] private string TitleName;
         
@@ -29,9 +31,12 @@ namespace Game.Actors
         }
         
         
-        public void OnGrabEnable(Rigidbody socketRigidbody) =>
-                                _joint.connectedBody = socketRigidbody;
-        
+        public void OnGrabEnable(Rigidbody socketRigidbody)
+        {
+            _collider.enabled = false;
+            _joint.connectedBody = socketRigidbody;
+        }
+
         public string GetTitleName() => TitleName;
 
         public Transform GetTransform() => SelfTransform;

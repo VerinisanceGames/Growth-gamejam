@@ -1,7 +1,7 @@
-using System;
 using Core;
 using Core.GameServices;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Game.Actors;
 using Game.Services;
 using Game.Enums;
@@ -62,7 +62,11 @@ namespace Game.Managers
             {
                 var fertilizer = Instantiate(_fertilizerPrefabs[_stageIndex], _spawnTransform.position,
                     _spawnTransform.rotation);
-
+                
+                Vector3 destination = fertilizer.SelfTransform.position;
+                destination.y = 0.2f;
+                fertilizer.SelfTransform.DOMove(destination, 1.0f);
+                
                 var dp = fertilizer.GetComponentsInChildren<MonoBehaviour>();
                 foreach (var d in dp)
                     if(d is IInjectWorld injectWorld)

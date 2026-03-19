@@ -14714,6 +14714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rectText: {fileID: 1264730674}
+  _widgetOffsetY: 0
   _animationEase: 24
   _animationDuration: 0.5
 --- !u!4 &716071070 stripped
@@ -39712,7 +39713,7 @@ Transform:
   m_GameObject: {fileID: 1494272987}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.052, y: 1.532, z: -4.218}
+  m_LocalPosition: {x: -10.052, y: 1.52, z: -4.218}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40725,8 +40726,6 @@ MonoBehaviour:
   _stageTime: 30
   _stageText: {fileID: 1627573656}
   _stageTimerText: {fileID: 366812438}
-  commonAudioSource: {fileID: 621934040}
-  fertilizerDropSound: {fileID: 8300000, guid: 717d454157735994990d452610b91537, type: 3}
 --- !u!1001 &1580036844
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -201,6 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SelfTransform>k__BackingField: {fileID: 5817250738621328195}
+  _collider: {fileID: 979416002015719586}
   TitleName: FertilizerActor
   <FertilizerType>k__BackingField: 0
   _joint: {fileID: 5277465289731150052}
